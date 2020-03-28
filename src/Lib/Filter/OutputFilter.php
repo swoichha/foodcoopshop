@@ -23,11 +23,9 @@ class OutputFilter
             return $text;
         }
         
-        $text = str_replace(
-            array_keys($searchAndReplace),
-            array_values($searchAndReplace),
-            $text
-        );
+        foreach($searchAndReplace as $search => $replace) {
+            $text = preg_replace('`' . $search . '`', $replace, $text);
+        }
         
         return $text;
         
