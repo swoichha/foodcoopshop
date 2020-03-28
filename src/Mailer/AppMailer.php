@@ -71,8 +71,9 @@ class AppMailer extends Mailer
                 $this->getMessage()->setBodyHtml($replacedBody);
             }
             
-            // do not use paremt:send() here because $replaced body would not be sent
-            $email = $this->getTransport()->send($this->getMessage());
+            // do not use parent:send() here because $replaced body would not be sent
+            // ->render() needs to be called to properly use logEmailInDatabase()
+            $email = $this->getTransport()->send($this->render()->getMessage());
             
             if (Configure::read('appDb.FCS_EMAIL_LOG_ENABLED')) {
                 $this->logEmailInDatabase($email);
@@ -88,7 +89,7 @@ class AppMailer extends Mailer
                 }
                 Log::error('The email could not be sent but was resent with the fallback configuration.<br /><br />' . $e->__toString());
                 $this->setTransport('fallback');
-                return $this->getTransport()->send($this->getMessage());
+                return $this->getTransport()->send($this->render()->getMessage());
             } else {
                 throw $e;
             }
