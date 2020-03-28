@@ -14,6 +14,16 @@
  */
 namespace App\Lib\Filter;
 
+/**
+ * Strings in any outputs (email, html, pdf) can be replaced using
+ * `app.outputStringReplacements`
+ * 
+ * Example in your custom_config.php
+ * 
+ * 'outputStringReplacements' => [
+ *     'Manfacturers' => 'Producers',
+ *  ]
+ */
 class OutputFilter
 {
     public static function replace(string $text, array $searchAndReplace): string
