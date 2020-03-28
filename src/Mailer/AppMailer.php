@@ -2,6 +2,7 @@
 
 namespace App\Mailer;
 
+use App\Lib\Filter\OutputFilter;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\Log\Log;
@@ -62,11 +63,23 @@ class AppMailer extends Mailer
     public function send(?string $action = null, array $args = [], array $headers = []): array
     {
         try {
-            $email = parent::send($action);
+            
+            if (Configure::check('app.outputStringReplacements')) {
+                $replacedSubject = OutputFilter::replace($this->getSubject(), Configure::read('app.outputStringReplacements'));
+                $this->setSubject($replacedSubject);
+                $replacedBody = OutputFilter::replace($this->render()->getMessage()->getBodyString(), Configure::read('app.outputStringReplacements'));
+                $this->getMessage()->setBodyHtml($replacedBody);
+            }
+            
+            // do not use paremt:send() here because $replaced body would not be sent
+            $email = $this->getTransport()->send($this->getMessage());
+            
             if (Configure::read('appDb.FCS_EMAIL_LOG_ENABLED')) {
                 $this->logEmailInDatabase($email);
             }
+            
             return $email;
+            
         } catch (Exception $e) {
             if (Configure::check('app.EmailTransport.fallback')) {
                 // only try to reconfigure callback config once
@@ -75,7 +88,7 @@ class AppMailer extends Mailer
                 }
                 Log::error('The email could not be sent but was resent with the fallback configuration.<br /><br />' . $e->__toString());
                 $this->setTransport('fallback');
-                return parent::send($action);
+                return $this->getTransport()->send($this->getMessage());
             } else {
                 throw $e;
             }
