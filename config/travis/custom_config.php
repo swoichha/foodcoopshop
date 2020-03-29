@@ -70,7 +70,7 @@ return [
         
         'outputStringReplacements' => [
             'This is a test' => 'This is another test',
-        ]
+        ],
 
         /**
          * valid options of array: 'cashless' or 'cash' (or both but this is not recommended)
