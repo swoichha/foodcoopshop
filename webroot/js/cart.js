@@ -21,14 +21,14 @@ foodcoopshop.Cart = {
         return '.cart p.pickup-day-header:contains("' + pickupDay + '")';
     },
     
-    addOrAppendProductToPickupDay : function(productId, amount, price, productName, unity, manufacturerLink, image, deposit, tax, timebasedCurrencyHours, orderedQuantityInUnits, unitName, unitAmount, priceInclPerUnit, pickupDay) {
+    addOrAppendProductToPickupDay : function(productId, amount, price, productName, unity, manufacturerName, image, deposit, tax, timebasedCurrencyHours, orderedQuantityInUnits, unitName, unitAmount, priceInclPerUnit, pickupDay) {
         var pickupDayHeader = $(this.getPickupDayHeaderSelector(pickupDay));
         if (pickupDayHeader.length == 0) {
             $('.cart p.products').append('<p class="pickup-day-header">' + foodcoopshop.LocalizedJs.cart.PickupDay + ': <b>' + pickupDay + '</b></p>');
             pickupDayHeader = $(this.getPickupDayHeaderSelector(pickupDay)); // re-init after append
         }
         pickupDayHeader.append(
-            foodcoopshop.Cart.getCartProductHtml(productId, amount, price, productName, unity, manufacturerLink, image, deposit, tax, timebasedCurrencyHours, orderedQuantityInUnits, unitName, unitAmount, priceInclPerUnit, pickupDay)
+            foodcoopshop.Cart.getCartProductHtml(productId, amount, price, productName, unity, manufacturerName, image, deposit, tax, timebasedCurrencyHours, orderedQuantityInUnits, unitName, unitAmount, priceInclPerUnit, pickupDay)
         );
     },
     
@@ -55,7 +55,7 @@ foodcoopshop.Cart = {
         for (var i = 0; i < cartProducts.length; i++) {
             var cp = cartProducts[i];
             var timebasedCurrencyHours = parseFloat(cp.timebasedCurrencySeconds / 3600);
-            this.addOrAppendProductToPickupDay(cp.productId, cp.amount, cp.price, cp.productName, cp.unity_with_unit, cp.manufacturerLink, cp.image, cp.deposit, cp.tax, timebasedCurrencyHours, cp.orderedQuantityInUnits, cp.unitName, cp.unitAmount, cp.priceInclPerUnit, cp.nextDeliveryDay);
+            this.addOrAppendProductToPickupDay(cp.productId, cp.amount, cp.price, cp.productName, cp.unity_with_unit, cp.manufacturerName, cp.image, cp.deposit, cp.tax, timebasedCurrencyHours, cp.orderedQuantityInUnits, cp.unitName, cp.unitAmount, cp.priceInclPerUnit, cp.nextDeliveryDay);
             sum += cp.price;
             depositSum += cp.deposit;
             taxSum += cp.tax;
@@ -427,7 +427,7 @@ foodcoopshop.Cart = {
         });
     },
 
-    getCartProductHtml: function (productId, amount, price, productName, unity, manufacturerLink, image, deposit, tax, timebasedCurrencyHours, orderedQuantityInUnits, unitName, unitAmount, priceInclPerUnit, pickupDay) {
+    getCartProductHtml: function (productId, amount, price, productName, unity, manufacturerName, image, deposit, tax, timebasedCurrencyHours, orderedQuantityInUnits, unitName, unitAmount, priceInclPerUnit, pickupDay) {
         var imgHtml = '<span class="image">' + image + '</span>';
         if (!$(image).attr('src').match(/de-default-home/)) {
             imgHtml = '<a href="'  + $(image).attr('src').replace(/-home_/, '-thickbox_') +  '" class="image">' + image + '</a>';
@@ -453,7 +453,7 @@ foodcoopshop.Cart = {
                     unityHtml +
                     '<span class="pickup-day hide">' + pickupDay + '</span>' +
             '</span>' +
-            '<span class="manufacturer-link">' + manufacturerLink + '</span>' +
+            '<span class="manufacturer-name">' + manufacturerName + '</span>' +
             '<span class="right">' +
                 '<span class="delete"><a class="btn" title="' + foodcoopshop.LocalizedJs.cart.removeFromCart + '" href="javascript:void(0);"><i class="fas fa-times-circle"></i></a></span>' +
                 '<span class="price">' + foodcoopshop.Helper.formatFloatAsCurrency(price) + '</span>' +

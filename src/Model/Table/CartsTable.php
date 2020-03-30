@@ -160,10 +160,9 @@ class CartsTable extends AppTable
             }
 
             $productImage = Configure::read('app.htmlHelper')->image(Configure::read('app.htmlHelper')->getProductImageSrc($imageId, 'home'));
-            $manufacturerLink = Configure::read('app.htmlHelper')->link($cartProduct->product->manufacturer->name, Configure::read('app.slugHelper')->getManufacturerDetail($cartProduct->product->id_manufacturer, $cartProduct->product->manufacturer->name));
             $productData['image'] = $productImage;
             $productData['productName'] = $cartProduct->product->name;
-            $productData['manufacturerLink'] = $manufacturerLink;
+            $productData['manufacturerName'] = $cartProduct->product->manufacturer->name;
 
             switch($cartType) {
                 case self::CART_TYPE_WEEKLY_RHYTHM:

@@ -95,6 +95,7 @@ return [
         'rightOfWithdrawalEnabled' => true,
         'promiseToPickUpProductsCheckboxEnabled' => false,
         'showPaymentInfoText' => true,
+        'showManufacturerListAndDetailPage' => true,
         
         /**
          * id of the category "all products"

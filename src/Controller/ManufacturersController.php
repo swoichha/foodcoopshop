@@ -7,6 +7,7 @@ use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * ManufacturersController
@@ -28,7 +29,11 @@ class ManufacturersController extends FrontendController
 
     public function beforeFilter(EventInterface $event)
     {
-
+        
+        if (!Configure::read('app.showManufacturerListAndDetailPage')) {
+            throw new NotFoundException();
+        }
+        
         parent::beforeFilter($event);
         switch ($this->getRequest()->getParam('action')) {
             case 'detail':
@@ -84,6 +89,7 @@ class ManufacturersController extends FrontendController
 
     public function detail()
     {
+        
         $manufacturerId = (int) $this->getRequest()->getParam('pass')[0];
 
         $conditions = [

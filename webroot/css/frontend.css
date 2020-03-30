@@ -803,7 +803,7 @@ body.carts.detail #load-last-order-details,
     float: left;
     margin-right: 3px;
 }
-.cart span.manufacturer-link,
+.cart span.manufacturer-name,
 .cart .image,
 .cart span.deposit,
 .cart p.deposit-sum-wrapper,
@@ -983,7 +983,7 @@ body.carts.detail .cart:not(#cart) p.deposit-sum-wrapper span.sum {
 body.carts.detail .cart:not(#cart) p.tax-sum-wrapper {
     margin-top: 20px;
 }
-body.carts.detail .cart:not(#cart) span.manufacturer-link {
+body.carts.detail .cart:not(#cart) span.manufacturer-name {
     display: inline;
     width: 150px;
 }
