@@ -67,13 +67,12 @@ class AppMailer extends Mailer
             if (Configure::check('app.outputStringReplacements')) {
                 $replacedSubject = OutputFilter::replace($this->getOriginalSubject(), Configure::read('app.outputStringReplacements'));
                 $this->setSubject($replacedSubject);
-                $replacedBody = OutputFilter::replace($this->render()->getMessage()->getBodyString(), Configure::read('app.outputStringReplacements'));
+                $replacedBody = OutputFilter::replace($this->render()->getMessage()->getBodyHtml(), Configure::read('app.outputStringReplacements'));
                 $this->getMessage()->setBodyHtml($replacedBody);
             }
             
             // do not use parent:send() here because $replaced body would not be sent
-            // ->render() needs to be called to properly use logEmailInDatabase()
-            $email = $this->getTransport()->send($this->render()->getMessage());
+            $email = $this->getTransport()->send($this->getMessage());
             
             if (Configure::read('appDb.FCS_EMAIL_LOG_ENABLED')) {
                 $this->logEmailInDatabase($email);
@@ -89,7 +88,7 @@ class AppMailer extends Mailer
                 }
                 Log::error('The email could not be sent but was resent with the fallback configuration.<br /><br />' . $e->__toString());
                 $this->setTransport('fallback');
-                return $this->getTransport()->send($this->render()->getMessage());
+                return $this->getTransport()->send($this->getMessage());
             } else {
                 throw $e;
             }
