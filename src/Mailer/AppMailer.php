@@ -64,10 +64,12 @@ class AppMailer extends Mailer
     {
         try {
             
+            $this->render();
+            
             if (Configure::check('app.outputStringReplacements')) {
                 $replacedSubject = OutputFilter::replace($this->getOriginalSubject(), Configure::read('app.outputStringReplacements'));
                 $this->setSubject($replacedSubject);
-                $replacedBody = OutputFilter::replace($this->render()->getMessage()->getBodyHtml(), Configure::read('app.outputStringReplacements'));
+                $replacedBody = OutputFilter::replace($this->getMessage()->getBodyHtml(), Configure::read('app.outputStringReplacements'));
                 $this->getMessage()->setBodyHtml($replacedBody);
             }
             
