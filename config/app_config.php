@@ -89,7 +89,7 @@ return [
          * - firstname
          * - lastname
          */
-        'customerMainNamePart' => 'lastname',
+        'customerMainNamePart' => 'firstname',
         
         'showManufacturerImprint' => true,
         'termsOfUseEnabled' => true,
@@ -195,7 +195,7 @@ return [
         
         'isBlogFeatureEnabled' => true,
         
-        'isCustomerAllowedToModifyOwnOrders' => false,
+        'isCustomerAllowedToModifyOwnOrders' => true,
         
         'showStatisticsForAdmins' => true,
         
