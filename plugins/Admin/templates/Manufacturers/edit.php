@@ -282,12 +282,14 @@ if ($appAuth->isManufacturer()) {
 <div class="sc"></div>
 
 <?php
-echo $this->element('imageUploadForm', [
-    'id' => $idForUpload,
-    'action' => '/admin/tools/doTmpImageUpload/',
-    'imageExists' => $imageExists,
-    'existingImageSrc' => $imageSrc
-]);
+if (Configure::read('app.showManufacturerListAndDetailPage')) {
+    echo $this->element('imageUploadForm', [
+        'id' => $idForUpload,
+        'action' => '/admin/tools/doTmpImageUpload/',
+        'imageExists' => $imageExists,
+        'existingImageSrc' => $imageSrc
+    ]);
+}
 echo $this->element('fileUploadForm', [
     'id' => $idForUpload,
     'action' => '/admin/tools/doTmpFileUpload/',
