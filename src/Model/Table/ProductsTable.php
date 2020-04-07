@@ -157,49 +157,57 @@ class ProductsTable extends AppTable
             $currentDay = Configure::read('app.timeHelper')->getCurrentDateForDatabase();
         }
         
-        $sendOrderListsWeekday = null;
-        if (!is_null($product->delivery_rhythm_send_order_list_weekday)) {
-            $sendOrderListsWeekday = $product->delivery_rhythm_send_order_list_weekday;
-        }
-        
-        $pickupDay = Configure::read('app.timeHelper')->getDbFormattedPickupDayByDbFormattedDate($currentDay, $sendOrderListsWeekday);
-        
-        // assure that $product->is_stock_product also contains check for $product->manufacturer->stock_management_enabled
-        if ($product->is_stock_product) {
-            return $pickupDay;
-        }
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly') {
             
-        if ($product->delivery_rhythm_type == 'week') {
-            if (!is_null($product->delivery_rhythm_first_delivery_day)) {
-                $calculatedPickupDay = $product->delivery_rhythm_first_delivery_day->i18nFormat(Configure::read('app.timeHelper')->getI18Format('Database'));
-                while($calculatedPickupDay < $pickupDay) {
-                    $calculatedPickupDay = strtotime($calculatedPickupDay . '+' . $product->delivery_rhythm_count . ' week');
-                    $calculatedPickupDay = date(Configure::read('app.timeHelper')->getI18Format('DatabaseAlt'), $calculatedPickupDay);
+            $sendOrderListsWeekday = null;
+            if (!is_null($product->delivery_rhythm_send_order_list_weekday)) {
+                $sendOrderListsWeekday = $product->delivery_rhythm_send_order_list_weekday;
+            }
+            
+            $pickupDay = Configure::read('app.timeHelper')->getDbFormattedPickupDayByDbFormattedDate($currentDay, $sendOrderListsWeekday);
+            
+            // assure that $product->is_stock_product also contains check for $product->manufacturer->stock_management_enabled
+            if ($product->is_stock_product) {
+                return $pickupDay;
+            }
+                
+            if ($product->delivery_rhythm_type == 'week') {
+                if (!is_null($product->delivery_rhythm_first_delivery_day)) {
+                    $calculatedPickupDay = $product->delivery_rhythm_first_delivery_day->i18nFormat(Configure::read('app.timeHelper')->getI18Format('Database'));
+                    while($calculatedPickupDay < $pickupDay) {
+                        $calculatedPickupDay = strtotime($calculatedPickupDay . '+' . $product->delivery_rhythm_count . ' week');
+                        $calculatedPickupDay = date(Configure::read('app.timeHelper')->getI18Format('DatabaseAlt'), $calculatedPickupDay);
+                    }
+                    $pickupDay = $calculatedPickupDay;
                 }
-                $pickupDay = $calculatedPickupDay;
             }
+            
+            if ($product->delivery_rhythm_type == 'month') {
+                switch($product->delivery_rhythm_count) {
+                    case '1':
+                        $ordinal = 'first';
+                        break;
+                    case '0':
+                        $ordinal = 'last';
+                        break;
+                }
+                $deliveryDayAsWeekdayInEnglish = strtolower(date('l', strtotime($pickupDay)));
+                $nthDeliveryDayOfThisMonth = date(Configure::read('app.timeHelper')->getI18Format('DatabaseAlt'), strtotime($currentDay . ' ' . $ordinal . ' ' . $deliveryDayAsWeekdayInEnglish . ' of this month'));
+                if ($nthDeliveryDayOfThisMonth < $pickupDay) {
+                    $pickupDay = date(Configure::read('app.timeHelper')->getI18Format('DatabaseAlt'), strtotime($currentDay . ' ' . $ordinal . ' ' . $deliveryDayAsWeekdayInEnglish . ' of next month'));
+                } else {
+                    $pickupDay = $nthDeliveryDayOfThisMonth;
+                }
+            }
+            
+            if ($product->delivery_rhythm_type == 'individual') {
+                $pickupDay = $product->delivery_rhythm_first_delivery_day->i18nFormat(Configure::read('app.timeHelper')->getI18Format('Database'));
+            }
+            
         }
         
-        if ($product->delivery_rhythm_type == 'month') {
-            switch($product->delivery_rhythm_count) {
-                case '1':
-                    $ordinal = 'first';
-                    break;
-                case '0':
-                    $ordinal = 'last';
-                    break;
-            }
-            $deliveryDayAsWeekdayInEnglish = strtolower(date('l', strtotime($pickupDay)));
-            $nthDeliveryDayOfThisMonth = date(Configure::read('app.timeHelper')->getI18Format('DatabaseAlt'), strtotime($currentDay . ' ' . $ordinal . ' ' . $deliveryDayAsWeekdayInEnglish . ' of this month'));
-            if ($nthDeliveryDayOfThisMonth < $pickupDay) {
-                $pickupDay = date(Configure::read('app.timeHelper')->getI18Format('DatabaseAlt'), strtotime($currentDay . ' ' . $ordinal . ' ' . $deliveryDayAsWeekdayInEnglish . ' of next month'));
-            } else {
-                $pickupDay = $nthDeliveryDayOfThisMonth;
-            }
-        }
-        
-        if ($product->delivery_rhythm_type == 'individual') {
-            $pickupDay = $product->delivery_rhythm_first_delivery_day->i18nFormat(Configure::read('app.timeHelper')->getI18Format('Database'));
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'daily') {
+            $pickupDay = date(Configure::read('app.timeHelper')->getI18Format('DatabaseAlt'), strtotime($currentDay . ' +' . Configure::read('appDb.FCS_DAILY_PICKUP_DAY_DELTA') . ' day'));
         }
             
         return $pickupDay;

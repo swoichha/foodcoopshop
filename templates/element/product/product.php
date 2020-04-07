@@ -94,29 +94,35 @@ if ($product['description'] != '') {
         echo '<br />'.__('Pickup_day').': ';
     }
     echo '<span class="pickup-day">';
-        if ($appAuth->isInstantOrderMode()) {
-            $pickupDayDetailText = __('Instant_order');
-        } else {
-            $pickupDayDetailText = $this->Html->getDeliveryRhythmString(
-                $product['is_stock_product'] && $product['stock_management_enabled'],
-                $product['delivery_rhythm_type'],
-                $product['delivery_rhythm_count']
-            );
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly') {
+            if ($appAuth->isInstantOrderMode()) {
+                $pickupDayDetailText = __('Instant_order');
+            } else {
+                $pickupDayDetailText = $this->Html->getDeliveryRhythmString(
+                    $product['is_stock_product'] && $product['stock_management_enabled'],
+                    $product['delivery_rhythm_type'],
+                    $product['delivery_rhythm_count']
+                );
+            }
         }
         echo $this->Time->getDateFormattedWithWeekday(strtotime($product['next_delivery_day']));
     echo '</span>';
-    if (!$appAuth->isSelfServiceModeByUrl()) {
-        echo ' (' . $pickupDayDetailText . ')';
+    if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly') {
+        if (!$appAuth->isSelfServiceModeByUrl()) {
+            echo ' (' . $pickupDayDetailText . ')';
+        }
     }
-    if (!$appAuth->isSelfServiceModeByUrl() && !$appAuth->isInstantOrderMode()) {
-        if (strtotime($product['next_delivery_day']) != $this->Time->getDeliveryDayByCurrentDay()) {
-            $weeksAsFloat = (strtotime($product['next_delivery_day']) - strtotime(date($this->MyTime->getI18Format('DateShortAlt')))) / 24/60/60;
-            $fullWeeks = (int) ($weeksAsFloat / 7);
-            $days = $weeksAsFloat % 7;
-            if ($days == 0) {
-                echo ' - <b>'. __('{0,plural,=1{1_week} other{#_weeks}}', [$fullWeeks]) . '</b>';
-            } else {
-                echo ' - <b>'. __('{0,plural,=1{1_week} other{#_weeks}} {1,plural,=1{and_1_day} other{and_#_days}}', [$fullWeeks, $days]) . '</b>';
+    if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly') {
+        if (!$appAuth->isSelfServiceModeByUrl() && !$appAuth->isInstantOrderMode()) {
+            if (strtotime($product['next_delivery_day']) != $this->Time->getDeliveryDayByCurrentDay()) {
+                $weeksAsFloat = (strtotime($product['next_delivery_day']) - strtotime(date($this->MyTime->getI18Format('DateShortAlt')))) / 24/60/60;
+                $fullWeeks = (int) ($weeksAsFloat / 7);
+                $days = $weeksAsFloat % 7;
+                if ($days == 0) {
+                    echo ' - <b>'. __('{0,plural,=1{1_week} other{#_weeks}}', [$fullWeeks]) . '</b>';
+                } else {
+                    echo ' - <b>'. __('{0,plural,=1{1_week} other{#_weeks}} {1,plural,=1{and_1_day} other{and_#_days}}', [$fullWeeks, $days]) . '</b>';
+                }
             }
         }
     }
