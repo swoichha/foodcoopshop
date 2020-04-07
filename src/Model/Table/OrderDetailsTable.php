@@ -86,7 +86,7 @@ class OrderDetailsTable extends AppTable
     
     public function getOrderDetailsForSendingOrderLists($pickupDay, $cronjobRunDay)
     {
-        $cronjobRunDayWeekday = date('w', strtotime($cronjobRunDay));
+        
         $query = $this->find('all', [
             'contain' => [
                 'Products',
@@ -95,13 +95,22 @@ class OrderDetailsTable extends AppTable
             ]
         ]);
         $query->where(['OrderDetails.order_state' => ORDER_STATE_ORDER_PLACED]);
-        $query->where(function ($exp, $query) use ($cronjobRunDayWeekday, $cronjobRunDay, $pickupDay) {
-            return $exp->or_([
-                '(Products.delivery_rhythm_type <> "individual" AND Products.delivery_rhythm_send_order_list_weekday = ' . $cronjobRunDayWeekday . ')
-                 AND OrderDetails.pickup_day = "' . $pickupDay . '"',
-                '(Products.delivery_rhythm_type = "individual" AND Products.delivery_rhythm_send_order_list_day = "' . $cronjobRunDay . '" AND OrderDetails.pickup_day = Products.delivery_rhythm_first_delivery_day)'
-            ]);
-        });
+        
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly') {
+            $cronjobRunDayWeekday = date('w', strtotime($cronjobRunDay));
+            $query->where(function ($exp, $query) use ($cronjobRunDayWeekday, $cronjobRunDay, $pickupDay) {
+                return $exp->or_([
+                    '(Products.delivery_rhythm_type <> "individual" AND Products.delivery_rhythm_send_order_list_weekday = ' . $cronjobRunDayWeekday . ')
+                     AND OrderDetails.pickup_day = "' . $pickupDay . '"',
+                    '(Products.delivery_rhythm_type = "individual" AND Products.delivery_rhythm_send_order_list_day = "' . $cronjobRunDay . '" AND OrderDetails.pickup_day = Products.delivery_rhythm_first_delivery_day)'
+                ]);
+            });
+        }
+        
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'daily') {
+            $query->where(['OrderDetails.pickup_day' => $pickupDay]);
+        }
+            
         return $query;
     }
     
