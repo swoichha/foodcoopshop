@@ -229,7 +229,7 @@ use Cake\Core\Configure;
             'product' => $product
         ]);
         
-        echo $this->element('productList/data/deliveryRhythm', [
+        echo $this->element('productList/data/deliveryRhythmMain' . ucfirst(Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM')), [
             'product' => $product
         ]);
         

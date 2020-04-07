@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-03-29 18:15+0200\n"
+"POT-Creation-Date: 2020-04-07 14:10+0200\n"
 "PO-Revision-Date: 2020-03-19 21:01+0100\n"
 "Last-Translator: Patryk Sobczak <firerain.tgz@gmail.com>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -1880,6 +1880,9 @@ msgstr "jeśli dostępne"
 
 msgid "No_email_notifications_are_sent_for_this_product."
 msgstr "Powiadomienia nigdy nie będą wysyłane dla tego produktu jeśli ilość magazynowa jest zbyt niska."
+
+msgid "daily"
+msgstr ""
 
 msgid "change_delivery_rhythm"
 msgstr "zmieńharmonogram dostaw"
