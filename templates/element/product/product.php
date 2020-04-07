@@ -82,12 +82,14 @@ if ($product['description'] != '') {
         echo '<br />' . __('Order_possible_until') . ': ' . $this->Time->getDateFormattedWithWeekday(strtotime($product['delivery_rhythm_order_possible_until']));
     }
     
-    if (!$appAuth->isInstantOrderMode() && !($product['stock_management_enabled'] && $product['is_stock_product']) && $product['delivery_rhythm_type'] != 'individual' && $this->Time->getSendOrderListsWeekday() != $product['delivery_rhythm_send_order_list_weekday']) {
-        echo '<span class="last-order-day">';
-            echo __('Last_order_day') . ': <b>' . $this->Time->getWeekdayName(
-                $this->Time->getNthWeekdayBeforeWeekday(1, $product['delivery_rhythm_send_order_list_weekday'])
-            ) . '</b> ' . __('midnight');
-        echo '</span>';
+    if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly') {
+        if (!$appAuth->isInstantOrderMode() && !($product['stock_management_enabled'] && $product['is_stock_product']) && $product['delivery_rhythm_type'] != 'individual' && $this->Time->getSendOrderListsWeekday() != $product['delivery_rhythm_send_order_list_weekday']) {
+            echo '<span class="last-order-day">';
+                echo __('Last_order_day') . ': <b>' . $this->Time->getWeekdayName(
+                    $this->Time->getNthWeekdayBeforeWeekday(1, $product['delivery_rhythm_send_order_list_weekday'])
+                ) . '</b> ' . __('midnight');
+            echo '</span>';
+        }
     }
     
     if (!$appAuth->isSelfServiceModeByUrl()) {
