@@ -59,10 +59,15 @@ class OrderDetailsTable extends AppTable
         $this->addBehavior('Timestamp');
     }
 
-    public function validationPickupDay(Validator $validator)
+    public function validationPickupDayWeekly(Validator $validator)
     {
-        $validator->notEquals('pickup_day', '1970-01-01', __('The_pickup_day_is_not_valid.'));
+        $validator = $this->validationPickupDayDaily($validator);
         $validator = $this->getAllowOnlyOneWeekdayValidator($validator, 'pickup_day', __('The_pickup_day'));
+        return $validator;
+    }
+    
+    public function validationPickupDayDaily(Validator $validator) {
+        $validator->notEquals('pickup_day', '1970-01-01', __('The_pickup_day_is_not_valid.'));
         return $validator;
     }
     

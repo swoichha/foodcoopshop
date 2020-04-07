@@ -1038,7 +1038,7 @@ class OrderDetailsController extends AdminAppController
                     'pickup_day' => $pickupDay
                 ],
                 [
-                    'validate' => 'pickupDay'
+                    'validate' => 'pickupDay' . ucfirst(Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'))
                 ]
             );
             if ($entity->hasErrors()) {
