@@ -72,6 +72,14 @@ $this->element('addScript', [
                 continue;
             }
             
+            if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly' && $configuration->name == 'FCS_WEEKLY_PICKUP_DAY') {
+                continue;
+            }
+            
+            if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'daily' && $configuration->name == 'FCS_DAILY_PICKUP_DAY_DELTA') {
+                continue;
+            }
+            
             echo '<tr>';
 
                 echo '<td class="first">';
