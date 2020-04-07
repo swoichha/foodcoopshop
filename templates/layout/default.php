@@ -52,7 +52,7 @@ echo $this->element('layout/header');
             <?php echo $this->element('globalNoDeliveryDayBox'); ?>
             <?php echo $this->element('cart', [
                 'selfServiceModeEnabled' => false,
-                'showLoadLastOrderDetailsDropdown' => true,
+                'showLoadLastOrderDetailsDropdown' => Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly',
                 'showCartDetailButton' => true,
                 'showFutureOrderDetails' => true,
                 'icon' => 'fa-shopping-cart',
