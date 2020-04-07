@@ -184,27 +184,35 @@ class MyTimeHelper extends TimeHelper
 
     public function getDeliveryDay($orderDay, $sendOrderListsWeekday = null, $deliveryRhythmType = null, $deliveryRhythmCount = null)
     {
-        if (is_null($deliveryRhythmType)) {
-            $deliveryRhythmType = 'week';
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly') {
+            
+            if (is_null($deliveryRhythmType)) {
+                $deliveryRhythmType = 'week';
+            }
+            if (is_null($deliveryRhythmCount)) {
+                $deliveryRhythmCount = 1;
+            }
+            $daysToAddToOrderPeriodLastDay = Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') + 1;
+            $deliveryDate = strtotime($this->getOrderPeriodLastDay($orderDay) . '+' . $daysToAddToOrderPeriodLastDay . ' days');
+            
+            $weekdayDeliveryDate = $this->formatAsWeekday($deliveryDate);
+            $weekdayStringDeliveryDate = strtolower(date('l', $deliveryDate));
+            
+            $weekdayOrderDay = $this->formatAsWeekday($orderDay);
+            
+            if (is_null($sendOrderListsWeekday)) {
+                $sendOrderListsWeekday = $this->getSendOrderListsWeekday();
+            }
+            
+            if ($weekdayOrderDay >= $sendOrderListsWeekday && $weekdayOrderDay <= $weekdayDeliveryDate && $deliveryRhythmType != 'individual') {
+                $preparedOrderDay = date($this->getI18Format('DateShortAlt'), $orderDay);
+                $deliveryDate = strtotime($preparedOrderDay . '+ ' . $deliveryRhythmCount .  ' ' . $deliveryRhythmType . ' ' . $weekdayStringDeliveryDate);
+            }
         }
-        if (is_null($deliveryRhythmCount)) {
-            $deliveryRhythmCount = 1;
-        }
-        $daysToAddToOrderPeriodLastDay = Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') + 1;
-        $deliveryDate = strtotime($this->getOrderPeriodLastDay($orderDay) . '+' . $daysToAddToOrderPeriodLastDay . ' days');
         
-        $weekdayDeliveryDate = $this->formatAsWeekday($deliveryDate);
-        $weekdayStringDeliveryDate = strtolower(date('l', $deliveryDate));
-        
-        $weekdayOrderDay = $this->formatAsWeekday($orderDay);
-        
-        if (is_null($sendOrderListsWeekday)) {
-            $sendOrderListsWeekday = $this->getSendOrderListsWeekday();
-        }
-        
-        if ($weekdayOrderDay >= $sendOrderListsWeekday && $weekdayOrderDay <= $weekdayDeliveryDate && $deliveryRhythmType != 'individual') {
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'daily') {
             $preparedOrderDay = date($this->getI18Format('DateShortAlt'), $orderDay);
-            $deliveryDate = strtotime($preparedOrderDay . '+ ' . $deliveryRhythmCount .  ' ' . $deliveryRhythmType . ' ' . $weekdayStringDeliveryDate);
+            $deliveryDate = strtotime($preparedOrderDay . '+ ' . Configure::read('appDb.FCS_DAILY_PICKUP_DAY_DELTA') . ' day');
         }
         
         return $deliveryDate;
@@ -258,17 +266,21 @@ class MyTimeHelper extends TimeHelper
      */
     public function getOrderPeriodFirstDay($day)
     {
-
-        $currentWeekday = $this->formatAsWeekday($day);
-        $dateDiff = 7 - $this->getSendOrderListsWeekday() + $currentWeekday;
-        $date = strtotime('-' . $dateDiff . ' day ', $day);
-
-        if ($currentWeekday > $this->getDeliveryWeekday()) {
-            $date = strtotime('+7 day', $date);
+        
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly') {
+            $currentWeekday = $this->formatAsWeekday($day);
+            $dateDiff = 7 - $this->getSendOrderListsWeekday() + $currentWeekday;
+            $date = strtotime('-' . $dateDiff . ' day ', $day);
+            if ($currentWeekday > $this->getDeliveryWeekday()) {
+                $date = strtotime('+7 day', $date);
+            }
         }
-
+        
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'daily') {
+            $date = $day;
+        }
+        
         $date = date($this->getI18Format('DateShortAlt'), $date);
-
         return $date;
     }
 
@@ -280,31 +292,37 @@ class MyTimeHelper extends TimeHelper
     public function getOrderPeriodLastDay($day)
     {
 
-        $currentWeekday = $this->formatAsWeekday($day);
-
-        if ($currentWeekday == 7) {
-            $currentWeekday = 0;
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly') {
+            $currentWeekday = $this->formatAsWeekday($day);
+    
+            if ($currentWeekday == 7) {
+                $currentWeekday = 0;
+            }
+    
+            if ($currentWeekday == $this->getDeliveryWeekday()) {
+                $dateDiff = -1 - Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA');
+            }
+            if ($currentWeekday == ($this->getDeliveryWeekday() + 1) % 7) {
+                $dateDiff = (Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1) + 5;
+            }
+            if ($currentWeekday == ($this->getDeliveryWeekday() + 2) % 7) {
+                $dateDiff = (Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1) + 4;
+            }
+            if ($currentWeekday == ($this->getDeliveryWeekday() + 3) % 7) {
+                $dateDiff = (Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1) + 3;
+            }
+            if ($currentWeekday == ($this->getDeliveryWeekday() + 4) % 7) {
+                $dateDiff = (Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1) + 2;
+            }
+            if ($currentWeekday == ($this->getDeliveryWeekday() + 5) % 7) {
+                $dateDiff = (Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1) + 1;
+            }
+            if ($currentWeekday == ($this->getDeliveryWeekday() + 6) % 7) {
+                $dateDiff = Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1;
+            }
         }
-
-        if ($currentWeekday == $this->getDeliveryWeekday()) {
-            $dateDiff = -1 - Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA');
-        }
-        if ($currentWeekday == ($this->getDeliveryWeekday() + 1) % 7) {
-            $dateDiff = (Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1) + 5;
-        }
-        if ($currentWeekday == ($this->getDeliveryWeekday() + 2) % 7) {
-            $dateDiff = (Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1) + 4;
-        }
-        if ($currentWeekday == ($this->getDeliveryWeekday() + 3) % 7) {
-            $dateDiff = (Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1) + 3;
-        }
-        if ($currentWeekday == ($this->getDeliveryWeekday() + 4) % 7) {
-            $dateDiff = (Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1) + 2;
-        }
-        if ($currentWeekday == ($this->getDeliveryWeekday() + 5) % 7) {
-            $dateDiff = (Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1) + 1;
-        }
-        if ($currentWeekday == ($this->getDeliveryWeekday() + 6) % 7) {
+        
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'daily') {
             $dateDiff = Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1;
         }
 
