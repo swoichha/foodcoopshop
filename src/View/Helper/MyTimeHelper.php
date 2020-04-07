@@ -212,7 +212,7 @@ class MyTimeHelper extends TimeHelper
         
         if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'daily') {
             $preparedOrderDay = date($this->getI18Format('DateShortAlt'), $orderDay);
-            $deliveryDate = strtotime($preparedOrderDay . '+ ' . Configure::read('appDb.FCS_DAILY_PICKUP_DAY_DELTA') . ' day');
+            $deliveryDate = strtotime($preparedOrderDay . '+ ' . Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') . ' day');
         }
         
         return $deliveryDate;
