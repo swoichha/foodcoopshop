@@ -13,6 +13,7 @@
  */
 namespace App\View;
 
+use Cake\Core\Configure;
 use Cake\View\View;
 
 /**
@@ -40,9 +41,15 @@ class AppView extends View
         $this->loadHelper('Html', [
             'className' => 'MyHtml'
         ]);
+        
+        $timeHelperClass = 'MyTime';
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'daily') {
+            $timeHelperClass = 'MyTimeDaily';
+        }
         $this->loadHelper('Time', [
-            'className' => 'MyTime'
+            'className' => $timeHelperClass
         ]);
+        
         $this->loadHelper('Number', [
             'className' => 'MyNumber'
         ]);

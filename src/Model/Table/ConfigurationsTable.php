@@ -4,8 +4,11 @@ namespace App\Model\Table;
 
 use Cake\Core\Configure;
 use App\Lib\Error\Exception\ConfigFileMissingException;
+use App\View\Helper\MyTimeDailyHelper;
+use App\View\Helper\MyTimeHelper;
 use Cake\Filesystem\File;
 use Cake\Validation\Validator;
+use Cake\View\View;
 
 /**
  * FoodCoopShop - The open source software for your foodcoop
@@ -228,9 +231,17 @@ class ConfigurationsTable extends AppTable
 
     public function loadConfigurations()
     {
+        
         $configurations = $this->getConfigurations();
         foreach ($configurations as $configuration) {
             Configure::write('appDb.' . $configuration->name, $configuration->value);
         }
+        
+        $timeHelperClass = MyTimeHelper::class;
+        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'daily') {
+            $timeHelperClass = MyTimeDailyHelper::class;
+        }
+        Configure::write('app.timeHelper', new $timeHelperClass(new View()));
+        
     }
 }
