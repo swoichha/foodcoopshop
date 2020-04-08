@@ -258,15 +258,14 @@ class MyTimeHelper extends TimeHelper
      */
     public function getOrderPeriodFirstDay($day)
     {
-        
         $currentWeekday = $this->formatAsWeekday($day);
         $dateDiff = 7 - $this->getSendOrderListsWeekday() + $currentWeekday;
         $date = strtotime('-' . $dateDiff . ' day ', $day);
         if ($currentWeekday > $this->getDeliveryWeekday()) {
             $date = strtotime('+7 day', $date);
         }
-        
         $date = date($this->getI18Format('DateShortAlt'), $date);
+        
         return $date;
     }
 
@@ -305,7 +304,6 @@ class MyTimeHelper extends TimeHelper
         if ($currentWeekday == ($this->getDeliveryWeekday() + 6) % 7) {
             $dateDiff = Configure::read('appDb.FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA') * -1;
         }
-        
         $date = date($this->getI18Format('DateShortAlt'), strtotime($dateDiff . ' day ', $day));
 
         return $date;
