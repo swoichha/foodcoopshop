@@ -53,7 +53,7 @@ class SendOrderListsShell extends AppShell
         ])->toArray();
 
         // 2) get all order details with pickup day in the given date range
-        $orderDetails = $this->OrderDetail->getOrderDetailsForSendingOrderLists($pickupDay, $this->cronjobRunDay);
+        $orderDetails = $this->OrderDetail->getOrderDetailsForSendingOrderLists($pickupDay, $this->cronjobRunDay, Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'));
         
         // 3) add up the order detail by manufacturer
         $manufacturerOrders = [];

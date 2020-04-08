@@ -84,7 +84,7 @@ class OrderDetailsTable extends AppTable
         return $query;
     }
     
-    public function getOrderDetailsForSendingOrderLists($pickupDay, $cronjobRunDay)
+    public function getOrderDetailsForSendingOrderLists($pickupDay, $cronjobRunDay, $mainDeliveryRhythm)
     {
         
         $query = $this->find('all', [
@@ -96,7 +96,7 @@ class OrderDetailsTable extends AppTable
         ]);
         $query->where(['OrderDetails.order_state' => ORDER_STATE_ORDER_PLACED]);
         
-        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'weekly') {
+        if ($mainDeliveryRhythm == 'weekly') {
             $cronjobRunDayWeekday = date('w', strtotime($cronjobRunDay));
             $query->where(function ($exp, $query) use ($cronjobRunDayWeekday, $cronjobRunDay, $pickupDay) {
                 return $exp->or_([
@@ -107,7 +107,7 @@ class OrderDetailsTable extends AppTable
             });
         }
         
-        if (Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM') == 'daily') {
+        if ($mainDeliveryRhythm == 'daily') {
             $query->where(['OrderDetails.pickup_day' => $pickupDay]);
         }
             
