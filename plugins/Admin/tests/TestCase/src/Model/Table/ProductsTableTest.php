@@ -401,6 +401,18 @@ class ProductsTableTest extends AppCakeTestCase
         $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
     }
     
+    public function testCalculatePickupDayMainDeliveryRhythmDailyPickupDayDelta1()
+    {
+        $this->changeConfiguration('FCS_MAIN_DELIVERY_RHYTHM', 'daily');
+        $this->changeConfiguration('FCS_DAILY_PICKUP_DAY_DELTA', 1);
+        $data = [
+            'product' => $this->Product->newEntity([]),
+            'currentDay' => '2020-08-04',
+            'result' => '2020-08-05'
+        ];
+        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+    }
+    
     private function assertPickupDay($product, $currentDay, $expectedResult)
     {
         $result = $this->Product->calculatePickupDayRespectingDeliveryRhythm($product, $currentDay);

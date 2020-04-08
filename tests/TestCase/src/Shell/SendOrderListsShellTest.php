@@ -313,6 +313,47 @@ class SendOrderListsShellTest extends AppCakeTestCase
         $this->assertEquals($defaultQuantity, $product2->product_attributes[0]->stock_available->quantity);
     }
     
+    public function testSendOrderListMainDeliveryRhythmDailyPickupDayDelta1()
+    {
+        
+        $this->changeConfiguration('FCS_MAIN_DELIVERY_RHYTHM', 'daily');
+        $this->changeConfiguration('FCS_DAILY_PICKUP_DAY_DELTA', 1);
+        $this->changeConfiguration('FCS_DEFAULT_SEND_ORDER_LISTS_DAY_DELTA', 0);
+        
+        $this->loginAsSuperadmin();
+        
+        $orderDetailId = 1;
+        
+        $this->OrderDetail->save(
+            $this->OrderDetail->patchEntity(
+                $this->OrderDetail->get($orderDetailId),
+                [
+                    'pickup_day' => '2020-08-05',
+                ]
+            )
+        );
+        
+        $cronjobRunDay = '2020-08-05';
+        $this->commandRunner->run(['cake', 'send_order_lists', $cronjobRunDay]);
+        
+        $this->assertOrderDetailState($orderDetailId, ORDER_STATE_ORDER_LIST_SENT_TO_MANUFACTURER);
+        
+        $emailLogs = $this->EmailLog->find('all')->toArray();
+        $this->assertEquals(1, count($emailLogs), 'amount of sent emails wrong');
+        $this->assertEmailLogs(
+            $emailLogs[0],
+            'Bestellungen für den 05.08.2020',
+            [
+                'im Anhang findest du zwei Bestelllisten',
+                'Demo-Gemuese-Hersteller_5_Bestellliste_Produkt_FoodCoop-Test-',
+                'Content-Type: application/pdf'
+            ],
+            [
+                Configure::read('test.loginEmailVegetableManufacturer')
+            ]
+        );
+    }
+    
     private function assertOrderDetailState($orderDetailId, $expectedOrderState)
     {
         $newOrderDetail = $this->OrderDetail->find('all', [
