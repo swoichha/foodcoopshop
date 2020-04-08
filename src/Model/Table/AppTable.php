@@ -276,7 +276,9 @@ class AppTable extends Table
                         'delivery_rhythm_send_order_list_day' => $product['delivery_rhythm_send_order_list_day'],
                         'is_stock_product' => $product['is_stock_product']
                     ]
-                )
+                ),
+                null,
+                Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'),
             );
             
             // deactivates the product if manufacturer based delivery break is enabled
