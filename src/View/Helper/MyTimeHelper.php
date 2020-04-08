@@ -265,7 +265,6 @@ class MyTimeHelper extends TimeHelper
             $date = strtotime('+7 day', $date);
         }
         $date = date($this->getI18Format('DateShortAlt'), $date);
-        
         return $date;
     }
 
