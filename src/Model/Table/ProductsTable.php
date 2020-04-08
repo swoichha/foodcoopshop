@@ -223,7 +223,7 @@ class ProductsTable extends AppTable
             return $this->calculatePickupDayRespectingDeliveryRhythmMainDeliveryRhythmDaily($product, $currentDay);
         }
         
-        throw new Exception('wrong value for $mainDeliveryRhythm: ' . $mainDeliveryRhythm);
+        throw new \Exception('wrong value for $mainDeliveryRhythm: ' . $mainDeliveryRhythm);
         
     }
 
