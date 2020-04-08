@@ -61,7 +61,9 @@ class FrontendController extends AppController
                         'is_stock_product' => (string) (
                             (boolean) $product['is_stock_product'] && (boolean) $product['stock_management_enabled']
                         )
-                    ]
+                    ],
+                    null,
+                    Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'),
                 ));
             }
             $product['attributes'] = [];

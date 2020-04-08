@@ -130,7 +130,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2018-10-07',
             'result' => '2018-11-02'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythmWeekNoFirstDeliveryDay()
@@ -146,7 +146,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2018-10-07',
             'result' => '2018-10-12'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythmWeekNormal()
@@ -162,7 +162,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2018-08-14',
             'result' => '2018-08-17'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythmWeekWithSendOrderListDayOneDayBeforeDefault()
@@ -179,7 +179,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2017-08-08',
             'result' => '2017-08-18'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythmWeekWithSendOrderListDayTwoDaysBeforeDefault()
@@ -196,7 +196,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2020-04-05',
             'result' => '2020-04-10'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm2WeekWithSendOrderListDayMonday()
@@ -214,7 +214,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2019-02-25',
             'result' => '2019-03-15'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm2WeekWithSendOrderListDayThursday()
@@ -232,7 +232,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2019-03-08',
             'result' => '2019-03-15'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm2WeekA()
@@ -249,7 +249,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2018-08-14',
             'result' => '2018-08-24'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm2WeekB()
@@ -266,7 +266,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2018-08-14',
             'result' => '2018-08-17'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm2WeekC()
@@ -283,7 +283,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2018-09-15',
             'result' => '2018-09-28'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm2WeekD()
@@ -300,7 +300,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2019-03-15',
             'result' => '2019-03-22'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm4Week()
@@ -317,7 +317,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2018-08-07',
             'result' => '2018-08-31'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm1MonthA()
@@ -333,7 +333,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2017-08-07',
             'result' => '2017-09-01'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm1MonthB()
@@ -349,7 +349,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2017-08-07',
             'result' => '2017-08-11'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm0MonthA()
@@ -365,7 +365,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2018-09-13',
             'result' => '2018-09-28'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythm0MonthB()
@@ -381,7 +381,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2018-08-07',
             'result' => '2018-08-31'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayRespectingDeliveryRhythmIndividual()
@@ -398,7 +398,7 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2017-08-07',
             'result' => '2018-08-03'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
     public function testCalculatePickupDayMainDeliveryRhythmDailyPickupDayDelta1()
@@ -410,12 +410,12 @@ class ProductsTableTest extends AppCakeTestCase
             'currentDay' => '2020-08-04',
             'result' => '2020-08-05'
         ];
-        $this->assertPickupDay($data['product'], $data['currentDay'], $data['result']);
+        $this->assertPickupDay($data['product'], $data['currentDay'], Configure::read('appDb.FCS_MAIN_DELIVERY_RHYTHM'), $data['result']);
     }
     
-    private function assertPickupDay($product, $currentDay, $expectedResult)
+    private function assertPickupDay($product, $currentDay, $mainDeliveryRhythm, $expectedResult)
     {
-        $result = $this->Product->calculatePickupDayRespectingDeliveryRhythm($product, $currentDay);
+        $result = $this->Product->calculatePickupDayRespectingDeliveryRhythm($product, $currentDay, $mainDeliveryRhythm);
         $this->assertEquals($expectedResult, $result);
     }
 
