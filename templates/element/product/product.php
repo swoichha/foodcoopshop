@@ -230,6 +230,10 @@ if ($product['description'] != '') {
                 }
                 echo '<div class="tax">'. $this->Number->formatAsCurrency($attribute['ProductAttributes']['tax']) . '</div>';
                 echo '</div>';
+            } else {
+                // Cart.js::initAddToCartButton() needs the following elements!
+                echo '<div class="price hide">' . $this->Number->formatAsCurrency(0) . '</div>';
+                echo '<div class="tax hide">'. $this->Number->formatAsCurrency(0) . '</div>';
             }
             echo $this->element('product/hiddenProductIdField', ['productId' => $product['id_product'] . '-' . $attribute['ProductAttributes']['id_product_attribute']]);
             echo $this->element('product/amountWrapper', [
@@ -244,7 +248,7 @@ if ($product['description'] != '') {
                 'stockAvailableQuantity' => $attribute['StockAvailables']['quantity'],
                 'stockAvailableQuantityLimit' => $attribute['StockAvailables']['quantity_limit'],
                 'stockAvailableAlwaysAvailable' => $attribute['StockAvailables']['always_available'],
-                'hideButton' => $isStockProductOrderPossible || !$showProductPrice,
+                'hideButton' => $isStockProductOrderPossible,
                 'cartButtonLabel' => $appAuth->isSelfServiceModeByUrl() ? __('Move_in_shopping_bag') : __('Move_in_cart'),
                 'cartButtonIcon' => $appAuth->isSelfServiceModeByUrl() ? 'fa-shopping-bag' : 'fa-cart-plus'
             ]);
@@ -319,6 +323,10 @@ if ($product['description'] != '') {
                     ]);
                 }
                 echo '<div class="tax">'. $this->Number->formatAsCurrency($product['tax']) . '</div>';
+            } else {
+                // Cart.js::initAddToCartButton() needs the following elements!
+                echo '<div class="price hide">' . $this->Number->formatAsCurrency(0) . '</div>';
+                echo '<div class="tax hide">'. $this->Number->formatAsCurrency(0) . '</div>';
             }
             
             echo $this->element('product/hiddenProductIdField', ['productId' => $product['id_product']]);
@@ -334,7 +342,7 @@ if ($product['description'] != '') {
                 'stockAvailableQuantity' => $product['quantity'],
                 'stockAvailableQuantityLimit' => $product['quantity_limit'],
                 'stockAvailableAlwaysAvailable' => $product['always_available'],
-                'hideButton' => $isStockProductOrderPossible || !$showProductPrice,
+                'hideButton' => $isStockProductOrderPossible,
                 'cartButtonLabel' => $appAuth->isSelfServiceModeByUrl() ? __('Move_in_shopping_bag') : __('Move_in_cart'),
                 'cartButtonIcon' => $appAuth->isSelfServiceModeByUrl() ? 'fa-shopping-bag' : 'fa-cart-plus'
             ]);
