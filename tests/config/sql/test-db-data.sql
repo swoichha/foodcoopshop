@@ -166,8 +166,9 @@ INSERT INTO `fcs_configuration` VALUES
 (585,1,'FCS_APP_ADDITIONAL_DATA','Zusätzliche Infos zur Foodcoop<br /><div class=\"small\">Z.B. ZVR-Zahl</div>','','textarea',8,'de_DE','2019-08-03 20:07:17','2019-08-03 20:07:17'),
 (586,1,'FCS_SELF_SERVICE_MODE_TEST_MODE_ENABLED','Selbstbedienungs-Modus im Test-Modus ausführen?<br /><div class=\"small\">Keine Verlinkung im Haupt-Menü und bei Lagerprodukten.</div>','1','boolean',310,'de_DE','2019-12-09 13:46:41','2019-12-09 13:46:41'),
 (587,1,'FCS_CASHLESS_PAYMENT_ADD_TYPE','Art der Eintragung der Guthaben-Aufladungen<br /><div class=\"small\">Wie gelangen die Guthaben-Aufladungen vom Bankkonto in den FoodCoopShop?</div>','manual','dropdown',145,'de_DE','2020-02-11 10:13:10','2020-02-11 10:13:10'),
-(588,1,'FCS_MAIN_DELIVERY_RHYTHM','Haupt-Lieferrhythmus<br /><div class=\"small\">Wöchentlich oder täglich.</div>','weekly','readonly',58,'de_DE','2020-04-07 14:04:40','2020-04-07 14:04:40'),
-(589,1,'FCS_DAILY_PICKUP_DAY_DELTA','Auf wie viele Tage nach dem Bestelltag soll der Abholtag gesetzt werden?','1','readonly',59,'de_DE','2020-04-07 14:04:40','2020-04-07 14:04:40');
+(588,1,'FCS_MAIN_DELIVERY_RHYTHM','Haupt-Lieferrhythmus<br /><div class=\"small\">Wöchentlich oder täglich.</div>','weekly','readonly',58,'de_DE','2020-04-07 14:04:28','2020-04-07 14:04:28'),
+(589,1,'FCS_DAILY_PICKUP_DAY_DELTA','Auf wie viele Tage nach dem Bestelltag soll der Abholtag gesetzt werden?','1','readonly',59,'de_DE','2020-04-07 14:04:28','2020-04-07 14:04:28'),
+(590,1,'FCS_SHOW_NEW_PRODUCTS_ON_HOME','Neue Produkte auch auf der Startseite anzeigen?','1','boolean',22,'de_DE','2020-04-15 09:41:54','2020-04-15 09:41:54');
 /*!40000 ALTER TABLE `fcs_configuration` ENABLE KEYS */;
 
 /*!40000 ALTER TABLE `fcs_cronjob_logs` DISABLE KEYS */;
@@ -355,7 +356,8 @@ INSERT INTO `fcs_units` VALUES
 /*!40000 ALTER TABLE `phinxlog` DISABLE KEYS */;
 INSERT INTO `phinxlog` VALUES
 (20200404145856,'RemoveV2Migrations','2020-04-04 15:01:16','2020-04-04 15:01:16',0),
-(20200407115024,'AddDeliveryRhythmDaily','2020-04-07 12:04:40','2020-04-07 12:04:40',0);
+(20200407115024,'AddDeliveryRhythmDaily','2020-04-07 12:04:40','2020-04-07 12:04:40',0),
+(20200415073329,'ShowNewProductsOnHome','2020-04-15 07:42:06','2020-04-15 07:42:06',0);
 /*!40000 ALTER TABLE `phinxlog` ENABLE KEYS */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
