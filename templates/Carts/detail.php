@@ -73,8 +73,12 @@ if (Configure::read('app.showManufacturerListAndDetailPage')) {
             	<?php echo $this->element('cart/paymentInfoText'); ?>
             </p>
         <?php } ?>
-         
-        <?php echo $this->element('cart/pickupPlaceInfoText'); ?>
+        
+        <?php
+            if (Configure::read('app.showPickupPlaceInfo')) {
+    	       echo $this->element('cart/pickupPlaceInfoText');
+    		}
+    	?>
     
     	<?php
             echo $this->element('cart/generalTermsAndConditionsCheckbox');

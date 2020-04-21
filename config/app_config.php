@@ -99,6 +99,7 @@ return [
         'promiseToPickUpProductsCheckboxEnabled' => false,
         'showPaymentInfoText' => true,
         'showManufacturerListAndDetailPage' => true,
+        'showPickupPlaceInfo' => true,
         
         /**
          * id of the category "all products"

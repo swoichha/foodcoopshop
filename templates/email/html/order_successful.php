@@ -80,16 +80,18 @@ foreach($cart['CartProducts'] as $pickupDay => $cartProducts) {
             </b></td></tr>
         <?php } ?>
 
-        <tr><td><p>
-            <?php
-                echo __(
-                    'Pickup_place:_{0}', [
-                        str_replace('<br />', ', ', $this->MyHtml->getAddressFromAddressConfiguration())
-                    ]
-                );
-            ?>
-        </p></td></tr>
-        
+	    <?php if (Configure::read('app.showPickupPlaceInfo')) { ?>
+            <tr><td><p>
+                <?php
+                    echo __(
+                        'Pickup_place:_{0}', [
+                            str_replace('<br />', ', ', $this->MyHtml->getAddressFromAddressConfiguration())
+                        ]
+                    );
+                ?>
+            </p></td></tr>
+    	<?php } ?>
+            
         <?php if (Configure::read('app.generalTermsAndConditionsEnabled') && Configure::read('app.rightOfWithdrawalEnabled')) { ?>
             <tr><td style="font-size:12px;">
             	<?php echo __('You_can_find_a_detailed_list_of_your_order_in_the_attached_order_confirmation.'); ?>
