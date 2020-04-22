@@ -353,6 +353,15 @@ class SendOrderListsShellTest extends AppCakeTestCase
             ]
         );
     }
+
+    public function testContentOfOrderList()
+    {
+        $this->loginAsSuperadmin();
+        $this->httpClient->get('/admin/manufacturers/getOrderListByProduct.pdf?manufacturerId=4&pickupDay=02.02.2018&outputType=html');
+        $expectedResult = file_get_contents(TESTS . 'config' . DS . 'data' . DS . 'orderList.html');
+        $expectedResult = $this->getCorrectedLogoPathInHtmlForPdfs($expectedResult);
+        $this->assertRegExpWithUnquotedString($expectedResult, $this->httpClient->getContent());
+    }
     
     private function assertOrderDetailState($orderDetailId, $expectedOrderState)
     {

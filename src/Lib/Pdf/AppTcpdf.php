@@ -27,7 +27,7 @@ abstract class AppTcpdf extends TCPDF
 
     public $textHelper;
     
-    protected $html = '';
+    private $html = '';
     
     public function setTextHelper($textHelper)
     {
@@ -48,10 +48,9 @@ abstract class AppTcpdf extends TCPDF
         parent::writeHTML($html, $ln, $fill, $reseth, $cell, $align);
     }
     
-    public function outputHtml()
+    public function getHtml()
     {
-        echo $this->html;
-        exit(0);
+        return $this->html;
     }
 
     public function renderTable()
