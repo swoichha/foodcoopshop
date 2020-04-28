@@ -162,6 +162,8 @@ return [
         
         'isBlogFeatureEnabled' => true,
         
+        'applyOrdersNotYetBilledCheckOnDeletingCustomers' => true,
+        
         'isCustomerAllowedToModifyOwnOrders' => true,
         
         'showStatisticsForAdmins' => true,
